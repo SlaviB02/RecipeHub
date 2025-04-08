@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RecipeHub.Data;
+using RecipeHub.Data.Repository.Interfaces;
+using RecipeHub.Data.Repository;
+using RecipeHub.Data.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +15,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<RecipeHubDbContext>();
+builder.Services.AddScoped<IRepository<Recipe>,Repository<Recipe>>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

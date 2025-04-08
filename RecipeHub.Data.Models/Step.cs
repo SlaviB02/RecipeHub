@@ -9,20 +9,15 @@ using static RecipeHub.Common.ValidationConstants;
 
 namespace RecipeHub.Data.Models
 {
-    public class Ingredient
+    public class Step
     {
         [Key]
-        [Comment("The unique identifier of the Ingredient")]
-        public Guid Id { get; set; }= Guid.NewGuid();
+        [Comment("The unique identifier of Step")]
+        public Guid Id { get; set; }=Guid.NewGuid();
 
         [Required]
-        [StringLength(IngredientNameMaxLength)]
-        [Comment("Name of the ingredient")]
+        [StringLength(StepNameMaxLength)]
         public string Name { get; set; } = null!;
-
-        [Required]
-        [Comment("Weight of the ingredient")]
-        public int Weight {  get; set; }
 
         public Recipe recipe { get; set; } = null!;
         [Required]

@@ -2,7 +2,30 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+
+    
+    <div class="jumbotron text-center bg-light p-5 rounded shadow">
+        <h1 class="display-4">Welcome to RecipeHub 🍽️</h1>
+        <p class="lead">Discover, cook, and enjoy delicious recipes from around the world.</p>
+        <a class="btn btn-success btn-lg mt-3" asp-controller="Recipe" asp-action="All" role="button">Browse Recipes</a>
+    </div>
+
+   
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <img src="~/images/cooking.jpg" class="img-fluid rounded shadow-sm" alt="Cooking">
+        </div>
+        <div class="col-md-6 d-flex align-items-center">
+            <div>
+                <h2>What's Cooking?</h2>
+                <p>
+                    Whether you're a seasoned chef or just getting started, RecipeHub has something for everyone.
+                    Add your own creations.
+                </p>
+                <a asp-controller="Recipe" asp-action="Add" class="btn btn-outline-primary">Add Your Own Recipe</a>
+            </div>
+        </div>
+    </div>
+
 </div>

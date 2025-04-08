@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RecipeHub.Data;
 
@@ -11,9 +12,11 @@ using RecipeHub.Data;
 namespace RecipeHub.Data.Migrations
 {
     [DbContext(typeof(RecipeHubDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250408180139_AddedIsDelete")]
+    partial class AddedIsDelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -237,7 +240,7 @@ namespace RecipeHub.Data.Migrations
                         .HasColumnType("nvarchar(40)")
                         .HasComment("Name of the ingredient");
 
-                    b.Property<Guid>("RecipeId")
+                    b.Property<Guid?>("RecipeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Weight")
@@ -269,34 +272,17 @@ namespace RecipeHub.Data.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasComment("The name of the recipe");
 
+                    b.Property<string>("Steps")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasComment("The steps for making the recipe");
+
                     b.Property<bool>("isDeleted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
 
                     b.ToTable("Recipes");
-                });
-
-            modelBuilder.Entity("RecipeHub.Data.Models.Step", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasComment("The unique identifier of Step");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<Guid>("RecipeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RecipeId");
-
-                    b.ToTable("Step");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -352,31 +338,14 @@ namespace RecipeHub.Data.Migrations
 
             modelBuilder.Entity("RecipeHub.Data.Models.Ingredient", b =>
                 {
-                    b.HasOne("RecipeHub.Data.Models.Recipe", "recipe")
+                    b.HasOne("RecipeHub.Data.Models.Recipe", null)
                         .WithMany("Ingredients")
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("recipe");
-                });
-
-            modelBuilder.Entity("RecipeHub.Data.Models.Step", b =>
-                {
-                    b.HasOne("RecipeHub.Data.Models.Recipe", "recipe")
-                        .WithMany("Steps")
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("recipe");
+                        .HasForeignKey("RecipeId");
                 });
 
             modelBuilder.Entity("RecipeHub.Data.Models.Recipe", b =>
                 {
                     b.Navigation("Ingredients");
-
-                    b.Navigation("Steps");
                 });
 #pragma warning restore 612, 618
         }

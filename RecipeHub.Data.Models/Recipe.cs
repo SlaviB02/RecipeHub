@@ -25,6 +25,8 @@ namespace RecipeHub.Data.Models
 
         [Required]
         [Comment("The steps for making the recipe")]
-        public IList<string> Steps { get; set; }=new List<string>();
+        public IList<Step> Steps { get; set; }=new List<Step>();
+
+        public bool isDeleted { get; set; }
     }
 }

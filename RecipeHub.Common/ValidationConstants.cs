@@ -10,5 +10,8 @@
 
         public const int WeightMin = 1;
         public const int WeightMax = 1000;
+
+        public const int StepNameMinLength = 10;
+        public const int StepNameMaxLength = 200;
     }
 }
