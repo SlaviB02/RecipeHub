@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\RecipeHub.Web.props" />
+</Project>
