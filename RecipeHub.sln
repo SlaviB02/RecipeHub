@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeHub.Web", "RecipeHub\RecipeHub.Web.csproj", "{02F7D6DA-F5C7-42C0-A49F-F22C73326941}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeHub.Data", "RecipeHub.Data\RecipeHub.Data.csproj", "{ACA06924-31DB-48BA-9E11-8267917BBB86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeHub.Data.Models", "RecipeHub.Data.Models\RecipeHub.Data.Models.csproj", "{C7F8EA55-587A-4914-9FD8-7E1E7D584CD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeHub.Common", "RecipeHub.Common\RecipeHub.Common.csproj", "{50A482CC-1FA5-464C-A892-7DF69113C8F9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{ACA06924-31DB-48BA-9E11-8267917BBB86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACA06924-31DB-48BA-9E11-8267917BBB86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACA06924-31DB-48BA-9E11-8267917BBB86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7F8EA55-587A-4914-9FD8-7E1E7D584CD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7F8EA55-587A-4914-9FD8-7E1E7D584CD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7F8EA55-587A-4914-9FD8-7E1E7D584CD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7F8EA55-587A-4914-9FD8-7E1E7D584CD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50A482CC-1FA5-464C-A892-7DF69113C8F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50A482CC-1FA5-464C-A892-7DF69113C8F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50A482CC-1FA5-464C-A892-7DF69113C8F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50A482CC-1FA5-464C-A892-7DF69113C8F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

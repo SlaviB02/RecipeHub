@@ -9,7 +9,7 @@ using RecipeHub.Data;
 
 namespace RecipeHub.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(RecipeHubDbContext))]
     [Migration("00000000000000_CreateIdentitySchema")]
     partial class CreateIdentitySchema
     {
