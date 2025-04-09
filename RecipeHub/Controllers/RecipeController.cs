@@ -28,5 +28,47 @@ namespace RecipeHub.Web.Controllers
             
             return View(list);
         }
+        [HttpGet]
+        public IActionResult Add()
+        {
+            AddRecipeModel model = new AddRecipeModel();
+
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult>Add(AddRecipeModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            Recipe recipe = new Recipe()
+            {
+                Name = model.Name,
+                ImageUrl = model.ImageUrl,
+            };
+
+            await repository.AddAsync(recipe);
+
+            return RedirectToAction("All");
+        }
+        [HttpGet]
+        public IActionResult AddSteps()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddSteps(string id,string step)
+        {
+            Guid GuidId=Guid.Parse(id);
+
+            var recipe=await repository.FirstOrDefaultAsync(x=>x.Id == GuidId);
+
+            recipe.Steps.Add(step);
+
+            await repository.UpdateAsync(recipe);
+
+            return RedirectToAction("AddSteps");
+        }
     }
 }
