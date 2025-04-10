@@ -67,6 +67,7 @@ namespace RecipeHub.Web.Controllers
             recipe.Steps.Add(step);
 
             await repository.UpdateAsync(recipe);
+            TempData["Message"] = "Successfully added Step";
 
             return RedirectToAction("AddSteps");
         }

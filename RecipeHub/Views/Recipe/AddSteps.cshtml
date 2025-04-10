@@ -1,9 +1,18 @@
 ﻿<h2>Add Recipe Steps</h2>
 
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>@TempData["Message"]</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+
 <form method="post" asp-action="AddSteps">
     <div id="stepsContainer">
         <div class="form-group">
-            <input class="form-control" aria-required="true" />
+            <input name="step" class="form-control" aria-required="true" />
         </div>
     </div>
     <br /><br />
