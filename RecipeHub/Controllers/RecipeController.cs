@@ -40,6 +40,8 @@ namespace RecipeHub.Web.Controllers
         [HttpPost]
         public async Task<IActionResult>Add(AddRecipeModel model)
         {
+
+            Guid Recipeid = Guid.NewGuid();
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -48,11 +50,12 @@ namespace RecipeHub.Web.Controllers
             {
                 Name = model.Name,
                 ImageUrl = model.ImageUrl,
+                Id = Recipeid
             };
 
             await RecipeRepository.AddAsync(recipe);
 
-            return RedirectToAction("All");
+            return RedirectToAction("AddIngredients", new {id=Recipeid});
         }
         [HttpGet]
         public IActionResult AddSteps()
@@ -72,9 +75,8 @@ namespace RecipeHub.Web.Controllers
             }
 
             await RecipeRepository.UpdateAsync(recipe);
-            TempData["Message"] = "Successfully added Steps";
-
-            return RedirectToAction("AddIngredients",new {id=GuidId});
+       
+            return RedirectToAction("All");
         }
         [HttpGet]
         public IActionResult AddIngredients()
@@ -102,7 +104,25 @@ namespace RecipeHub.Web.Controllers
 
            
 
-            return RedirectToAction("All");
+            return RedirectToAction("AddSteps", new { id = GuidId });
+        }
+        public async Task<IActionResult>Details(string id)
+        {
+            Guid GuidId = Guid.Parse(id);
+            var recipe = await RecipeRepository.GetAllAttached()
+                .Include(r => r.Ingredients)
+                .FirstOrDefaultAsync(r => r.Id == GuidId);
+            
+            DetailsViewModel model = new DetailsViewModel()
+            {
+                Id = GuidId,
+                Name = recipe!.Name,
+                ImageUrl = recipe.ImageUrl,
+                Ingredients = recipe.Ingredients,
+                Steps = recipe.Steps,
+            };
+
+            return View(model);
         }
     }
 }

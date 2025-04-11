@@ -1,12 +1,5 @@
 ﻿<h2>Add Ingredients in this input: ingredient - quantity</h2>
 
-@if (TempData["Message"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong>@TempData["Message"]</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
 
 
 <form method="post" asp-action="AddIngredients">

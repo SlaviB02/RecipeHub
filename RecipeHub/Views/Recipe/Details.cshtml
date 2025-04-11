@@ -1,0 +1,33 @@
+﻿@using RecipeHub.Web.ViewModels.Recipe
+@model DetailsViewModel
+
+@{
+    ViewData["Title"] = "Recipe Details";
+}
+
+<h2>@Model.Name</h2>
+
+<div class="mb-4">
+    <img src="/images/@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded" style="max-height: 400px;" />
+</div>
+
+<div class="mb-3">
+    <h4>Ingredients</h4>
+    <ul>
+        @foreach (var ingredient in Model.Ingredients)
+        {
+            <li style="font-size:20px">@ingredient.Name - @ingredient.Weight</li>
+        }
+    </ul>
+</div>
+
+<div class="mb-3">
+    <h4>Preparation Steps</h4>
+    <ul>
+        
+        @for(int i=0;i<Model.Steps.Count;i++)
+        {
+            <li class="list-unstyled" style="font-size:20px">@(i + 1). @Model.Steps[i]</li>
+        }
+    </ul>
+</div>
