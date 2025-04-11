@@ -1,0 +1,32 @@
+﻿<h2>Add Ingredients in this input: ingredient - quantity</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>@TempData["Message"]</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+
+<form method="post" asp-action="AddIngredients">
+    <div id="ingredientContainer">
+        <div class="form-group">
+            <input name="ingredients" class="form-control" aria-required="true" />
+        </div>
+    </div>
+    <br /><br />
+    <button type="button" class="btn btn-outline-primary mb-2 p-2" onclick="addIngredient()">+</button>
+    <br />
+    <input class="btn btn-outline-primary mb-2 p-2 fw-bold" type="submit" value="Add Ingredients" />
+</form>
+
+<script>
+    function addIngredient() {
+        var container = document.getElementById('ingredientContainer');
+        var input = document.createElement('input');
+        input.name = 'ingredients';
+        input.className = 'form-control my-2';
+        container.appendChild(input);
+    }
+</script>

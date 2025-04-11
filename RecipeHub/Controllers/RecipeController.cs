@@ -8,14 +8,16 @@ namespace RecipeHub.Web.Controllers
 {
     public class RecipeController : Controller
     {
-        private readonly IRepository<Recipe> repository;
-        public RecipeController(IRepository<Recipe> _repository)
+        private readonly IRepository<Recipe> RecipeRepository;
+        private readonly IRepository<Ingredient> IngredientRepository;
+        public RecipeController(IRepository<Recipe> _RecipeRepository, IRepository<Ingredient> _IngredientRepository)
         {
-            repository=_repository;
+            RecipeRepository=_RecipeRepository;
+            IngredientRepository = _IngredientRepository;
         }
         public async Task<IActionResult> All()
         {
-            var list = await repository.GetAllAttached()
+            var list = await RecipeRepository.GetAllAttached()
                 .Where(r=>r.isDeleted == false)
                 .Select(r =>new AllRecipesViewModel()
                 {
@@ -48,7 +50,7 @@ namespace RecipeHub.Web.Controllers
                 ImageUrl = model.ImageUrl,
             };
 
-            await repository.AddAsync(recipe);
+            await RecipeRepository.AddAsync(recipe);
 
             return RedirectToAction("All");
         }
@@ -58,18 +60,49 @@ namespace RecipeHub.Web.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> AddSteps(string id,string step)
+        public async Task<IActionResult> AddSteps(string id,List<string> steps)
         {
             Guid GuidId=Guid.Parse(id);
 
-            var recipe=await repository.FirstOrDefaultAsync(x=>x.Id == GuidId);
+            var recipe = await RecipeRepository.GetByIdAsync(GuidId);
 
-            recipe.Steps.Add(step);
+            foreach(var step in steps)
+            {
+                recipe.Steps.Add(step);
+            }
 
-            await repository.UpdateAsync(recipe);
-            TempData["Message"] = "Successfully added Step";
+            await RecipeRepository.UpdateAsync(recipe);
+            TempData["Message"] = "Successfully added Steps";
 
-            return RedirectToAction("AddSteps");
+            return RedirectToAction("AddIngredients",new {id=GuidId});
+        }
+        [HttpGet]
+        public IActionResult AddIngredients()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddIngredients(string id, List<string> ingredients)
+        {
+            Guid GuidId = Guid.Parse(id);
+
+           
+
+            foreach (var ingredient in ingredients)
+            {
+                string[]temp=ingredient.Split(" - ");
+                Ingredient ingrd = new Ingredient()
+                {
+                    RecipeId = GuidId,
+                    Name = temp[0],
+                    Weight = temp[1]
+                };
+               await IngredientRepository.AddAsync(ingrd);
+            }
+
+           
+
+            return RedirectToAction("All");
         }
     }
 }

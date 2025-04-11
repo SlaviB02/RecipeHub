@@ -21,8 +21,9 @@ namespace RecipeHub.Data.Models
         public string Name { get; set; } = null!;
 
         [Required]
+        [StringLength(IngredientWeightMaxLength)]
         [Comment("Weight of the ingredient")]
-        public int Weight {  get; set; }
+        public string Weight { get; set; } = null!;
 
         public Recipe recipe { get; set; } = null!;
         [Required]

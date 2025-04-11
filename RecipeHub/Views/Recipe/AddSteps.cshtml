@@ -1,21 +1,24 @@
 ﻿<h2>Add Recipe Steps</h2>
 
-@if (TempData["Message"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong>@TempData["Message"]</strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
-
 
 <form method="post" asp-action="AddSteps">
     <div id="stepsContainer">
         <div class="form-group">
-            <input name="step" class="form-control" aria-required="true" />
+            <input name="steps" class="form-control" aria-required="true" />
         </div>
     </div>
     <br /><br />
-    <input class="btn btn-warning mb-2 w-100 p-3 fw-bold" type="submit" value="Post" />
- 
+    <button type="button" class="btn btn-outline-primary mb-2 p-2" onclick="addStep()">+</button>
+    <br />
+    <input class="btn btn-outline-primary mb-2 p-2 fw-bold" type="submit" value="Add Steps" />
 </form>
+
+<script>
+    function addStep() {
+        var container = document.getElementById('stepsContainer');
+        var input = document.createElement('input');
+        input.name = 'Steps';
+        input.className = 'form-control my-2';
+        container.appendChild(input);
+    }
+</script>

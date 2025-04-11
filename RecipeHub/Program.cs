@@ -16,6 +16,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<RecipeHubDbContext>();
 builder.Services.AddScoped<IRepository<Recipe>,Repository<Recipe>>();
+builder.Services.AddScoped<IRepository<Ingredient>, Repository<Ingredient>>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
