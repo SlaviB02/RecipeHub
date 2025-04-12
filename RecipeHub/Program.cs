@@ -4,6 +4,8 @@ using RecipeHub.Data;
 using RecipeHub.Data.Repository.Interfaces;
 using RecipeHub.Data.Repository;
 using RecipeHub.Data.Models;
+using RecipeHub.Services.Data.Interfaces;
+using RecipeHub.Services.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<RecipeHubDbContext>();
 builder.Services.AddScoped<IRepository<Recipe>,Repository<Recipe>>();
 builder.Services.AddScoped<IRepository<Ingredient>, Repository<Ingredient>>();
+builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

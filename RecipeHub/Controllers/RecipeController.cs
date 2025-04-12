@@ -3,31 +3,22 @@ using Microsoft.EntityFrameworkCore;
 using RecipeHub.Data.Repository.Interfaces;
 using RecipeHub.Data.Models;
 using RecipeHub.Web.ViewModels.Recipe;
+using RecipeHub.Services.Data.Interfaces;
 
 namespace RecipeHub.Web.Controllers
 {
     public class RecipeController : Controller
     {
-        private readonly IRepository<Recipe> RecipeRepository;
-        private readonly IRepository<Ingredient> IngredientRepository;
-        public RecipeController(IRepository<Recipe> _RecipeRepository, IRepository<Ingredient> _IngredientRepository)
+        private readonly IRecipeService recipeService;
+        
+        public RecipeController(IRecipeService _recipeService)
         {
-            RecipeRepository=_RecipeRepository;
-            IngredientRepository = _IngredientRepository;
+           recipeService = _recipeService;
         }
         public async Task<IActionResult> All()
         {
-            var list = await RecipeRepository.GetAllAttached()
-                .Where(r=>r.isDeleted == false)
-                .Select(r =>new AllRecipesViewModel()
-                {
-                    Name = r.Name,
-                    ImageUrl = r.ImageUrl,
-                    Id = r.Id,
-                })
-                .ToListAsync();
+            var list = await recipeService.GetAllRecipesAsync();
                 
-            
             return View(list);
         }
         [HttpGet]
@@ -40,22 +31,15 @@ namespace RecipeHub.Web.Controllers
         [HttpPost]
         public async Task<IActionResult>Add(AddRecipeModel model)
         {
-
-            Guid Recipeid = Guid.NewGuid();
+            
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-            Recipe recipe = new Recipe()
-            {
-                Name = model.Name,
-                ImageUrl = model.ImageUrl,
-                Id = Recipeid
-            };
 
-            await RecipeRepository.AddAsync(recipe);
+            var RecipeId = await recipeService.AddRecipeAsync(model);
 
-            return RedirectToAction("AddIngredients", new {id=Recipeid});
+            return RedirectToAction("AddIngredients", new {id=RecipeId});
         }
         [HttpGet]
         public IActionResult AddSteps()
@@ -67,14 +51,7 @@ namespace RecipeHub.Web.Controllers
         {
             Guid GuidId=Guid.Parse(id);
 
-            var recipe = await RecipeRepository.GetByIdAsync(GuidId);
-
-            foreach(var step in steps)
-            {
-                recipe.Steps.Add(step);
-            }
-
-            await RecipeRepository.UpdateAsync(recipe);
+            await recipeService.AddStepsAsync(GuidId, steps);
        
             return RedirectToAction("All");
         }
@@ -88,39 +65,15 @@ namespace RecipeHub.Web.Controllers
         {
             Guid GuidId = Guid.Parse(id);
 
-           
-
-            foreach (var ingredient in ingredients)
-            {
-                string[]temp=ingredient.Split(" - ");
-                Ingredient ingrd = new Ingredient()
-                {
-                    RecipeId = GuidId,
-                    Name = temp[0],
-                    Weight = temp[1]
-                };
-               await IngredientRepository.AddAsync(ingrd);
-            }
-
-           
+            await recipeService.AddIngredientsAsync(GuidId, ingredients);  
 
             return RedirectToAction("AddSteps", new { id = GuidId });
         }
         public async Task<IActionResult>Details(string id)
         {
             Guid GuidId = Guid.Parse(id);
-            var recipe = await RecipeRepository.GetAllAttached()
-                .Include(r => r.Ingredients)
-                .FirstOrDefaultAsync(r => r.Id == GuidId);
-            
-            DetailsViewModel model = new DetailsViewModel()
-            {
-                Id = GuidId,
-                Name = recipe!.Name,
-                ImageUrl = recipe.ImageUrl,
-                Ingredients = recipe.Ingredients,
-                Steps = recipe.Steps,
-            };
+
+            var model=await recipeService.GetDetailsModelAsync(GuidId);
 
             return View(model);
         }
