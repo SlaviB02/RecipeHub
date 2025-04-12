@@ -5,29 +5,34 @@
     ViewData["Title"] = "Recipe Details";
 }
 
-<h2>@Model.Name</h2>
+<h2 class="text-center pb-4">@Model.Name</h2>
 
-<div class="mb-4">
-    <img src="/images/@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded" style="max-height: 400px;" />
+
+<div class="row mb-4 mt-4">
+    
+    <div class="col-md-6">
+        <h4>Ingredients</h4>
+        <ul>
+            @foreach (var ingredient in Model.Ingredients)
+            {
+                <li style="font-size: 20px;">@ingredient.Name - @ingredient.Weight</li>
+            }
+        </ul>
+    </div>
+
+   
+    <div class="col-md-6 d-flex align-items-start justify-content-center mb-xxl-3">
+        <img src="/images/@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded" style="max-height: 400px; width: 100%; object-fit: cover;" />
+    </div>
 </div>
 
-<div class="mb-3">
-    <h4>Ingredients</h4>
-    <ul>
-        @foreach (var ingredient in Model.Ingredients)
-        {
-            <li style="font-size:20px">@ingredient.Name - @ingredient.Weight</li>
-        }
-    </ul>
-</div>
 
-<div class="mb-3">
-    <h4>Preparation Steps</h4>
-    <ul>
-        
-        @for(int i=0;i<Model.Steps.Count;i++)
+<div >
+    <h4 class="mb-xxl-5 text-center">Preparation Steps</h4>
+    <ul class="list-unstyled text-start ">
+        @for (int i = 0; i < Model.Steps.Count; i++)
         {
-            <li class="list-unstyled" style="font-size:20px">@(i + 1). @Model.Steps[i]</li>
+            <li style="font-size: 20px;">@(i + 1). @Model.Steps[i]</li>
         }
     </ul>
 </div>
