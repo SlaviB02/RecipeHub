@@ -66,17 +66,24 @@ namespace RecipeHub.Services.Data
             return true;
         }
 
-        public async Task<IEnumerable<AllRecipesViewModel>> GetAllRecipesAsync()
+        public async Task<IEnumerable<AllRecipesViewModel>> GetAllRecipesAsync(string? searchText)
         {
-            var list = await RecipeRepository.GetAllAttached()
+            var query = RecipeRepository.GetAllAttached()
                .Where(r => r.isDeleted == false)
                .Select(r => new AllRecipesViewModel()
                {
                    Name = r.Name,
                    ImageUrl = r.ImageUrl,
                    Id = r.Id,
-               })
-               .ToListAsync();
+               });
+
+             if(!String.IsNullOrEmpty(searchText))
+            {
+                query = query.Where(r => r.Name.ToLower().Contains(searchText.ToLower()));
+            }
+
+            var list = await query.ToListAsync();
+               
 
             return list;
         }

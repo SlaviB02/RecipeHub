@@ -15,9 +15,11 @@ namespace RecipeHub.Web.Controllers
         {
            recipeService = _recipeService;
         }
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All(string searchText)
         {
-            var list = await recipeService.GetAllRecipesAsync();
+            var list = await recipeService.GetAllRecipesAsync(searchText);
+
+            ViewData["SearchText"] = searchText;
                 
             return View(list);
         }

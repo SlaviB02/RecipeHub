@@ -6,6 +6,16 @@
 
 <h2 class="text-center mt-4">Our Recipes</h2>
 
+<form asp-action="All" method="get">
+    <div class="form-actions no-color text-center">
+        <p>
+            <label>Find Recipe: <input class="p-2 rounded" type="text" name="searchText" value="@ViewData["SearchText"]" /></label>
+            <a asp-action="All" class="text-end btn btn-secondary m-1 rounded">Back to Full List</a>
+        </p>
+    </div>
+</form>
+
+
 <div class="container mt-4">
     <div class="row">
         @foreach (var recipe in Model)
