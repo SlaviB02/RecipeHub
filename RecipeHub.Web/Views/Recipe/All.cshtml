@@ -22,7 +22,7 @@
         {
             <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm text-center">
-                    <img src="/images/@recipe.ImageUrl" class="card-img-top" alt="@recipe.Name" style="height: 250px; object-fit: cover;">
+                    <img src="@recipe.ImageUrl" class="card-img-top" alt="@recipe.Name" style="height: 250px; object-fit: cover;">
                     <div class="card-body">
                         <h5 class="card-title">@recipe.Name</h5>
                         <a asp-controller="Recipe" asp-action="Details" asp-route-id="@recipe.Id" class="btn btn-outline-primary mt-2">

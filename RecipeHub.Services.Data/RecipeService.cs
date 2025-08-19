@@ -8,6 +8,8 @@ using RecipeHub.Data.Models;
 using RecipeHub.Data.Repository.Interfaces;
 using RecipeHub.Services.Data.Interfaces;
 using RecipeHub.Web.ViewModels.Recipe;
+using Microsoft.AspNetCore.Hosting;
+
 
 namespace RecipeHub.Services.Data
 {
@@ -15,8 +17,11 @@ namespace RecipeHub.Services.Data
     {
         private readonly IRepository<Recipe> RecipeRepository;
         private readonly IRepository<Ingredient> IngredientRepository;
-        public RecipeService(IRepository<Recipe> _RecipeRepository, IRepository<Ingredient> _IngredientRepository)
+        private readonly IHostingEnvironment env;
+        
+        public RecipeService(IRepository<Recipe> _RecipeRepository, IRepository<Ingredient> _IngredientRepository,IHostingEnvironment _env)
         {
+            env = _env;
             RecipeRepository = _RecipeRepository;
             IngredientRepository = _IngredientRepository;
         }
@@ -40,10 +45,31 @@ namespace RecipeHub.Services.Data
         public async Task<Guid> AddRecipeAsync(AddRecipeModel model)
         {
             Guid Recipeid = Guid.NewGuid();
+            string uniqueFileName = null;
+
+            if (model.ImageFile != null && model.ImageFile.Length > 0)
+            {
+                
+                string uploadsFolder = Path.Combine(env.WebRootPath, "images");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+               
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ImageFile.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.ImageFile.CopyTo(stream);
+                }
+            }
             Recipe recipe = new Recipe()
             {
-                Name = model.Name,
-                ImageUrl = model.ImageUrl,
+                Name = model.Title,
+                ImageUrl = "/images/" + uniqueFileName,
                 Id = Recipeid
             };
 
