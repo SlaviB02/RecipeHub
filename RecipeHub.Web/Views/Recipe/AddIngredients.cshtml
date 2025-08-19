@@ -4,22 +4,41 @@
 
 <form method="post" asp-action="AddIngredients">
     <div id="ingredientContainer">
-        <div class="form-group">
-            <input name="ingredients" class="form-control" aria-required="true" />
+        <div class="form-group d-flex gap-2 mb-2">
+            <input name="Ingredients[0].Name" class="form-control" placeholder="Ingredient" />
+            <input name="Ingredients[0].Quantity" class="form-control" placeholder="Quantity" />
         </div>
     </div>
-    <br /><br />
+
     <button type="button" class="btn btn-outline-primary mb-2 p-2" onclick="addIngredient()">+</button>
     <br />
     <input class="btn btn-outline-primary mb-2 p-2 fw-bold" type="submit" value="Add Ingredients" />
 </form>
 
+
 <script>
+    let index = 1;
+
     function addIngredient() {
         var container = document.getElementById('ingredientContainer');
-        var input = document.createElement('input');
-        input.name = 'ingredients';
-        input.className = 'form-control my-2';
-        container.appendChild(input);
+
+        var div = document.createElement('div');
+        div.className = "form-group d-flex gap-2 mb-2";
+
+        var inputName = document.createElement('input');
+        inputName.name = `Ingredients[${index}].Name`;
+        inputName.className = 'form-control';
+        inputName.placeholder = 'Ingredient';
+
+        var inputQuantity = document.createElement('input');
+        inputQuantity.name = `Ingredients[${index}].Quantity`;
+        inputQuantity.className = 'form-control';
+        inputQuantity.placeholder = 'Quantity';
+
+        div.appendChild(inputName);
+        div.appendChild(inputQuantity);
+        container.appendChild(div);
+
+        index++;
     }
 </script>

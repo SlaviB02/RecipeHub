@@ -26,16 +26,16 @@ namespace RecipeHub.Services.Data
             IngredientRepository = _IngredientRepository;
         }
 
-        public async Task<bool> AddIngredientsAsync(Guid id, IEnumerable<string> ingredients)
+        public async Task<bool> AddIngredientsAsync(Guid id, IEnumerable<IngridientViewModel> ingredients)
         {
             foreach (var ingredient in ingredients)
             {
-                string[] temp = ingredient.Split(" - ");
+                
                 Ingredient ingrd = new Ingredient()
                 {
                     RecipeId = id,
-                    Name = temp[0],
-                    Weight = temp[1]
+                    Name = ingredient.Name,
+                    Weight = ingredient.Quantity
                 };
                 await IngredientRepository.AddAsync(ingrd);
             }
