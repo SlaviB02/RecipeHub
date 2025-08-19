@@ -63,11 +63,11 @@ namespace RecipeHub.Web.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> AddIngredients(string id, List<string> ingredients)
+        public async Task<IActionResult> AddIngredients(string id, List<IngridientViewModel> Ingredients)
         {
             Guid GuidId = Guid.Parse(id);
 
-            await recipeService.AddIngredientsAsync(GuidId, ingredients);  
+            await recipeService.AddIngredientsAsync(GuidId, Ingredients);  
 
             return RedirectToAction("AddSteps", new { id = GuidId });
         }

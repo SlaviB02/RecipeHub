@@ -13,7 +13,7 @@ namespace RecipeHub.Services.Data.Interfaces
 
         Task<Guid>AddRecipeAsync(AddRecipeModel model);
 
-        Task<bool>AddIngredientsAsync(Guid id,IEnumerable<string> ingredients);
+        Task<bool>AddIngredientsAsync(Guid id,IEnumerable<IngridientViewModel> ingredients);
 
         Task<bool>AddStepsAsync(Guid id,IEnumerable<string> steps);
 
