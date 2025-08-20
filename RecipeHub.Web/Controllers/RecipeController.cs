@@ -27,6 +27,7 @@ namespace RecipeHub.Web.Controllers
         public IActionResult Add()
         {
             AddRecipeModel model = new AddRecipeModel();
+           
 
             return View(model);
         }
@@ -60,7 +61,10 @@ namespace RecipeHub.Web.Controllers
         [HttpGet]
         public IActionResult AddIngredients()
         {
-            return View();
+            var model = new IngridientViewModel();
+            model.Units = recipeService.GetUnitTypes();
+
+            return View(model);
         }
         [HttpPost]
         public async Task<IActionResult> AddIngredients(string id, List<IngridientViewModel> Ingredients)
