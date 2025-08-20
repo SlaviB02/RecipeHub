@@ -19,5 +19,7 @@ namespace RecipeHub.Services.Data.Interfaces
 
         Task<DetailsViewModel> GetDetailsModelAsync(Guid id);
 
+        IEnumerable<string> GetUnitTypes();
+
     }
 }

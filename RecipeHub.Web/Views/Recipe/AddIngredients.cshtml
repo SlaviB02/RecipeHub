@@ -1,4 +1,7 @@
-﻿<h2>Add Ingredients in this input: ingredient - quantity</h2>
+﻿@using RecipeHub.Web.ViewModels.Recipe
+@model IngridientViewModel
+
+<h2>Add Ingredients in this input: ingredient - quantity</h2>
 
 
 
@@ -7,8 +10,16 @@
         <div class="form-group d-flex gap-2 mb-2">
             <input name="Ingredients[0].Name" class="form-control" placeholder="Ingredient" />
             <input name="Ingredients[0].Quantity" class="form-control" placeholder="Quantity" />
+            <select name="Ingredients[0].Unit" class="form-control" aria-required="true">
+                <option disabled selected value="">Select Type....</option>
+                @foreach (var unit in Model.Units!)
+                {
+                    <option value="@unit">@unit.ToString()</option>
+                }
+            </select>
         </div>
     </div>
+
 
     <button type="button" class="btn btn-outline-primary mb-2 p-2" onclick="addIngredient()">+</button>
     <br />
@@ -35,10 +46,35 @@
         inputQuantity.className = 'form-control';
         inputQuantity.placeholder = 'Quantity';
 
+         var selectUnit = document.createElement('select');
+        selectUnit.name = `Ingredients[${index}].Unit`;
+        selectUnit.className = 'form-control';
+
+        var defaultOption = document.createElement('option');
+        defaultOption.text = "Select Type...";
+        defaultOption.value = "";
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        selectUnit.appendChild(defaultOption);
+
+        var units = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Units));
+       
+        units.forEach(u => {
+            var opt = document.createElement('option');
+            opt.value = u;
+            opt.text = u;
+            selectUnit.appendChild(opt);
+        });
+
+       
         div.appendChild(inputName);
         div.appendChild(inputQuantity);
+        div.appendChild(selectUnit);
         container.appendChild(div);
 
         index++;
+
+
+  
     }
 </script>

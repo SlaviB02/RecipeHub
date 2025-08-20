@@ -9,6 +9,7 @@ using RecipeHub.Data.Repository.Interfaces;
 using RecipeHub.Services.Data.Interfaces;
 using RecipeHub.Web.ViewModels.Recipe;
 using Microsoft.AspNetCore.Hosting;
+using RecipeHub.Data.Models.Enums;
 
 
 namespace RecipeHub.Services.Data
@@ -35,7 +36,7 @@ namespace RecipeHub.Services.Data
                 {
                     RecipeId = id,
                     Name = ingredient.Name,
-                    Weight = ingredient.Quantity
+                    Weight = ingredient.Quantity+" "+ingredient.Unit
                 };
                 await IngredientRepository.AddAsync(ingrd);
             }
@@ -130,6 +131,13 @@ namespace RecipeHub.Services.Data
             };
 
             return model;
+        }
+
+        public IEnumerable<string> GetUnitTypes()
+        {
+            var list = Enum.GetValues(typeof(UnitTypes)).Cast<UnitTypes>();
+
+            return list.Select(m => m.ToString());
         }
     }
 }
