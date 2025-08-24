@@ -19,6 +19,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<RecipeHubDbContext>();
 builder.Services.AddScoped<IRepository<Recipe>,Repository<Recipe>>();
 builder.Services.AddScoped<IRepository<Ingredient>, Repository<Ingredient>>();
+builder.Services.AddScoped<IRepository<Category>, Repository<Category>>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddControllersWithViews();
 

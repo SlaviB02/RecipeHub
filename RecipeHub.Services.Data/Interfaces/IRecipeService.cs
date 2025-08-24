@@ -21,5 +21,7 @@ namespace RecipeHub.Services.Data.Interfaces
 
         IEnumerable<string> GetUnitTypes();
 
+       Task<IEnumerable<string>> GetCategoryNamesAsync();
+
     }
 }

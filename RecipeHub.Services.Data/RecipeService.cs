@@ -18,13 +18,15 @@ namespace RecipeHub.Services.Data
     {
         private readonly IRepository<Recipe> RecipeRepository;
         private readonly IRepository<Ingredient> IngredientRepository;
+        private readonly IRepository<Category> CategoryRepository;
         private readonly IHostingEnvironment env;
         
-        public RecipeService(IRepository<Recipe> _RecipeRepository, IRepository<Ingredient> _IngredientRepository,IHostingEnvironment _env)
+        public RecipeService(IRepository<Recipe> _RecipeRepository, IRepository<Ingredient> _IngredientRepository,IHostingEnvironment _env, IRepository<Category> _CategoryRepository)
         {
             env = _env;
             RecipeRepository = _RecipeRepository;
             IngredientRepository = _IngredientRepository;
+            CategoryRepository = _CategoryRepository;
         }
 
         public async Task<bool> AddIngredientsAsync(Guid id, IEnumerable<IngridientViewModel> ingredients)
@@ -111,6 +113,13 @@ namespace RecipeHub.Services.Data
 
             var list = await query.ToListAsync();
                
+
+            return list;
+        }
+
+        public async Task<IEnumerable<string>> GetCategoryNamesAsync()
+        {
+            var list = await CategoryRepository.GetAllAttached().Select(x => x.Name).ToListAsync();
 
             return list;
         }

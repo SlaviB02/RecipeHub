@@ -18,10 +18,17 @@ namespace RecipeHub.Web.Controllers
         public async Task<IActionResult> All(string searchText)
         {
             var list = await recipeService.GetAllRecipesAsync(searchText);
+            var categories = await recipeService.GetCategoryNamesAsync();
+
+            var model = new RecipeAndCategoryModel()
+            {
+                Recipes = list,
+                CategoryNames = categories
+            };
 
             ViewData["SearchText"] = searchText;
-                
-            return View(list);
+
+            return View(model);
         }
         [HttpGet]
         public IActionResult Add()
