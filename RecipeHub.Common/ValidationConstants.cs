@@ -18,6 +18,8 @@
         public const int WeightMin = 1;
         public const int WeightMax = 1000;
 
-        
+        public const int CategoryNameMinLength = 5;
+        public const int CategoryNameMaxLength = 50;
+
     }
 }

@@ -14,5 +14,9 @@ namespace RecipeHub.Data
         public DbSet<Recipe> Recipes { get; set; } = null!;
 
         public DbSet<Ingredient> Ingredients { get; set;} = null!;
+
+        public DbSet<Category> Categories { get; set; } = null!;
+
+        public DbSet<RecipeCategory> RecipeCategories { get; set; } = null!;
     }
 }
