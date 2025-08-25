@@ -15,10 +15,14 @@ namespace RecipeHub.Web.Controllers
         {
            recipeService = _recipeService;
         }
-        public async Task<IActionResult> All(string searchText)
+        public async Task<IActionResult> All(string searchText, string[]checkedCategories)
         {
-            var list = await recipeService.GetAllRecipesAsync(searchText);
+
             var categories = await recipeService.GetCategoryNamesAsync();
+
+
+            var list = await recipeService.GetAllRecipesAsync(searchText,checkedCategories);
+           
 
             var model = new RecipeAndCategoryModel()
             {

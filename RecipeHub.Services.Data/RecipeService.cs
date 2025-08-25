@@ -95,7 +95,7 @@ namespace RecipeHub.Services.Data
             return true;
         }
 
-        public async Task<IEnumerable<AllRecipesViewModel>> GetAllRecipesAsync(string? searchText)
+        public async Task<IEnumerable<AllRecipesViewModel>> GetAllRecipesAsync(string? searchText, IEnumerable<string> categories)
         {
             var query = RecipeRepository.GetAllAttached()
                .Where(r => r.isDeleted == false)
@@ -104,11 +104,19 @@ namespace RecipeHub.Services.Data
                    Name = r.Name,
                    ImageUrl = r.ImageUrl,
                    Id = r.Id,
+                   Categories=r.RecipeCategories.Select(x=>x.Category.Name).ToList()
                });
 
              if(!String.IsNullOrEmpty(searchText))
             {
                 query = query.Where(r => r.Name.ToLower().Contains(searchText.ToLower()));
+            }
+             if(categories.Count()!=0)
+            {
+                foreach(var cat in categories)
+                {
+                    query = query.Where(x => x.Categories.Contains(cat));
+                }
             }
 
             var list = await query.ToListAsync();

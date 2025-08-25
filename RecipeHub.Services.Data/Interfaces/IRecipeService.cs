@@ -9,7 +9,7 @@ namespace RecipeHub.Services.Data.Interfaces
 {
     public interface IRecipeService
     {
-        Task<IEnumerable<AllRecipesViewModel>> GetAllRecipesAsync(string? searchText);
+        Task<IEnumerable<AllRecipesViewModel>> GetAllRecipesAsync(string? searchText,IEnumerable<string>categories);
 
         Task<Guid>AddRecipeAsync(AddRecipeModel model);
 
