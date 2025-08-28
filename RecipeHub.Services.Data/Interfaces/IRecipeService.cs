@@ -23,5 +23,7 @@ namespace RecipeHub.Services.Data.Interfaces
 
        Task<IEnumerable<string>> GetCategoryNamesAsync();
 
+       Task<bool>AddCategoriesAsync(Guid id,IEnumerable<string> categories);
+
     }
 }

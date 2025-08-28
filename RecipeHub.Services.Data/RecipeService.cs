@@ -19,14 +19,37 @@ namespace RecipeHub.Services.Data
         private readonly IRepository<Recipe> RecipeRepository;
         private readonly IRepository<Ingredient> IngredientRepository;
         private readonly IRepository<Category> CategoryRepository;
+        private readonly IRepository<RecipeCategory> RecipeCategoryRepository;
         private readonly IHostingEnvironment env;
         
-        public RecipeService(IRepository<Recipe> _RecipeRepository, IRepository<Ingredient> _IngredientRepository,IHostingEnvironment _env, IRepository<Category> _CategoryRepository)
+        public RecipeService(IRepository<Recipe> _RecipeRepository,
+            IRepository<Ingredient> _IngredientRepository,IHostingEnvironment _env, IRepository<Category> _CategoryRepository
+            ,IRepository<RecipeCategory> _RecipeCategoryRepository)
         {
             env = _env;
             RecipeRepository = _RecipeRepository;
             IngredientRepository = _IngredientRepository;
             CategoryRepository = _CategoryRepository;
+            RecipeCategoryRepository = _RecipeCategoryRepository;
+        }
+
+        public async Task<bool> AddCategoriesAsync(Guid id, IEnumerable<string> categories)
+        {
+            var cats=await CategoryRepository.GetAllAsync();
+            foreach(var category in categories)
+            {
+                var categoryId = cats.FirstOrDefault(c => c.Name == category);
+                if (categoryId != null)
+                {
+                    RecipeCategory rc = new RecipeCategory()
+                    {
+                        CategoryId = categoryId.Id,
+                        RecipeId = id,
+                    };
+                    await RecipeCategoryRepository.AddAsync(rc);
+                }
+            }
+            return true;
         }
 
         public async Task<bool> AddIngredientsAsync(Guid id, IEnumerable<IngridientViewModel> ingredients)

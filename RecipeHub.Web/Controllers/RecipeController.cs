@@ -4,6 +4,7 @@ using RecipeHub.Data.Repository.Interfaces;
 using RecipeHub.Data.Models;
 using RecipeHub.Web.ViewModels.Recipe;
 using RecipeHub.Services.Data.Interfaces;
+using System.Threading.Tasks;
 
 namespace RecipeHub.Web.Controllers
 {
@@ -66,8 +67,8 @@ namespace RecipeHub.Web.Controllers
             Guid GuidId=Guid.Parse(id);
 
             await recipeService.AddStepsAsync(GuidId, steps);
-       
-            return RedirectToAction("All");
+
+            return RedirectToAction("AddCategory", new { id = GuidId });
         }
         [HttpGet]
         public IActionResult AddIngredients()
@@ -93,6 +94,23 @@ namespace RecipeHub.Web.Controllers
             var model=await recipeService.GetDetailsModelAsync(GuidId);
 
             return View(model);
+        }
+        [HttpGet]
+        public async Task<IActionResult> AddCategory()
+        {
+            var list =await recipeService.GetCategoryNamesAsync();
+
+
+            return View(list);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddCategory(string id,string[] checkedCategories)
+        {
+            Guid GuidId = Guid.Parse(id);
+
+           await recipeService.AddCategoriesAsync(GuidId, checkedCategories);
+
+            return RedirectToAction("All");
         }
     }
 }
