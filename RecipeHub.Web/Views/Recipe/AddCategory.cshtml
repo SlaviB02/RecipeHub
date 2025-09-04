@@ -1,4 +1,4 @@
-﻿@model IEnumerable<string>
+﻿@model IDictionary<string,bool>
 
 
 <form asp-action="AddCategory" method="post">
@@ -9,9 +9,9 @@
                 <label class="category-tile">
                     <input type="checkbox"
                            name="checkedCategories"
-                           value="@category"
-                           class="category-checkbox" />
-                    <span class="category-label">@category</span>
+                           value="@category.Key"
+                           class="category-checkbox" @(category.Value ? "checked" : "") />
+                    <span class="category-label">@category.Key</span>
                 </label>
             </div>
         }

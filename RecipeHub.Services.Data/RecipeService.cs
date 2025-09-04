@@ -36,17 +36,23 @@ namespace RecipeHub.Services.Data
         public async Task<bool> AddCategoriesAsync(Guid id, IEnumerable<string> categories)
         {
             var cats=await CategoryRepository.GetAllAsync();
+
+            var categoryRecipes = await RecipeCategoryRepository.GetAllAsync();
             foreach(var category in categories)
             {
-                var categoryId = cats.FirstOrDefault(c => c.Name == category);
-                if (categoryId != null)
+                var categoryForRecipe = cats.FirstOrDefault(c => c.Name == category);
+                if (categoryForRecipe != null)
                 {
                     RecipeCategory rc = new RecipeCategory()
                     {
-                        CategoryId = categoryId.Id,
+                        CategoryId = categoryForRecipe.Id,
                         RecipeId = id,
                     };
-                    await RecipeCategoryRepository.AddAsync(rc);
+                    if(categoryRecipes.FirstOrDefault(x => x.RecipeId == id && x.CategoryId == categoryForRecipe.Id) == null)
+                    {
+                        await RecipeCategoryRepository.AddAsync(rc);
+                    }
+                    
                 }
             }
             return true;
@@ -146,6 +152,29 @@ namespace RecipeHub.Services.Data
                
 
             return list;
+        }
+
+        public async Task<IDictionary<string, bool>> GetCategoryForRecipeAsync(Guid id)
+        {
+            var list = await CategoryRepository.GetAllAttached().ToListAsync();
+
+            var recipe = await RecipeRepository.GetAllAttached().Include(x=>x.RecipeCategories).FirstOrDefaultAsync(x=>x.Id == id);
+
+            Dictionary<string, bool> res = new Dictionary<string, bool>();
+
+            foreach(var category in list)
+            {
+
+                if(recipe.RecipeCategories.FirstOrDefault(x=>x.RecipeId==id && x.CategoryId==category.Id) != null)
+                {
+                    res.Add(category.Name, true);
+                }
+                else
+                {
+                    res.Add(category.Name, false);
+                }
+            }
+            return res;
         }
 
         public async Task<IEnumerable<string>> GetCategoryNamesAsync()

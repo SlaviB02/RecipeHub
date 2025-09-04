@@ -96,12 +96,13 @@ namespace RecipeHub.Web.Controllers
             return View(model);
         }
         [HttpGet]
-        public async Task<IActionResult> AddCategory()
+        public async Task<IActionResult> AddCategory(string id)
         {
-            var list =await recipeService.GetCategoryNamesAsync();
+            Guid GuidId = Guid.Parse(id);
+            var dictionary = await recipeService.GetCategoryForRecipeAsync(GuidId);
 
 
-            return View(list);
+            return View(dictionary);
         }
         [HttpPost]
         public async Task<IActionResult> AddCategory(string id,string[] checkedCategories)
