@@ -1,0 +1,21 @@
+﻿@model IDictionary<string,bool>
+
+
+<form asp-action="AddCategory" method="post">
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
+        @foreach (var category in Model)
+        {
+            <div class="col">
+                <label class="category-tile">
+                    <input type="checkbox"
+                           name="checkedCategories"
+                           value="@category.Key"
+                           class="category-checkbox" @(category.Value ? "checked" : "") />
+                    <span class="category-label">@category.Key</span>
+                </label>
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Choose</button>
+</form>

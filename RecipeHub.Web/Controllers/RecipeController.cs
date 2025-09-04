@@ -4,6 +4,7 @@ using RecipeHub.Data.Repository.Interfaces;
 using RecipeHub.Data.Models;
 using RecipeHub.Web.ViewModels.Recipe;
 using RecipeHub.Services.Data.Interfaces;
+using System.Threading.Tasks;
 
 namespace RecipeHub.Web.Controllers
 {
@@ -15,13 +16,24 @@ namespace RecipeHub.Web.Controllers
         {
            recipeService = _recipeService;
         }
-        public async Task<IActionResult> All(string searchText)
+        public async Task<IActionResult> All(string searchText, string[]checkedCategories)
         {
-            var list = await recipeService.GetAllRecipesAsync(searchText);
+
+            var categories = await recipeService.GetCategoryNamesAsync();
+
+
+            var list = await recipeService.GetAllRecipesAsync(searchText,checkedCategories);
+           
+
+            var model = new RecipeAndCategoryModel()
+            {
+                Recipes = list,
+                CategoryNames = categories
+            };
 
             ViewData["SearchText"] = searchText;
-                
-            return View(list);
+
+            return View(model);
         }
         [HttpGet]
         public IActionResult Add()
@@ -55,8 +67,8 @@ namespace RecipeHub.Web.Controllers
             Guid GuidId=Guid.Parse(id);
 
             await recipeService.AddStepsAsync(GuidId, steps);
-       
-            return RedirectToAction("All");
+
+            return RedirectToAction("AddCategory", new { id = GuidId });
         }
         [HttpGet]
         public IActionResult AddIngredients()
@@ -82,6 +94,24 @@ namespace RecipeHub.Web.Controllers
             var model=await recipeService.GetDetailsModelAsync(GuidId);
 
             return View(model);
+        }
+        [HttpGet]
+        public async Task<IActionResult> AddCategory(string id)
+        {
+            Guid GuidId = Guid.Parse(id);
+            var dictionary = await recipeService.GetCategoryForRecipeAsync(GuidId);
+
+
+            return View(dictionary);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddCategory(string id,string[] checkedCategories)
+        {
+            Guid GuidId = Guid.Parse(id);
+
+           await recipeService.AddCategoriesAsync(GuidId, checkedCategories);
+
+            return RedirectToAction("All");
         }
     }
 }

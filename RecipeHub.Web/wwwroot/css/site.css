@@ -1,4 +1,4 @@
-html {
+﻿html {
   font-size: 14px;
 }
 
@@ -19,4 +19,28 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+.category-tile {
+    display: block;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* Hide the checkbox but keep it clickable */
+.category-checkbox {
+    display: none;
+}
+
+    /* Highlight the whole label when the checkbox is checked */
+    .category-checkbox:checked + .category-label {
+        font-weight: bold;
+    }
+
+.category-tile:has(.category-checkbox:checked) {
+    background-color: lightblue;
+    border-color: #3399ff;
 }

@@ -28,5 +28,7 @@ namespace RecipeHub.Data.Models
         public IList<string> Steps { get; set; }=new List<string>();
 
         public bool isDeleted { get; set; }
+
+        public ICollection<RecipeCategory> RecipeCategories { get; set; } = new HashSet<RecipeCategory>();
     }
 }

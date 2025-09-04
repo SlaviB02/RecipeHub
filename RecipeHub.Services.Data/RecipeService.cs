@@ -18,13 +18,44 @@ namespace RecipeHub.Services.Data
     {
         private readonly IRepository<Recipe> RecipeRepository;
         private readonly IRepository<Ingredient> IngredientRepository;
+        private readonly IRepository<Category> CategoryRepository;
+        private readonly IRepository<RecipeCategory> RecipeCategoryRepository;
         private readonly IHostingEnvironment env;
         
-        public RecipeService(IRepository<Recipe> _RecipeRepository, IRepository<Ingredient> _IngredientRepository,IHostingEnvironment _env)
+        public RecipeService(IRepository<Recipe> _RecipeRepository,
+            IRepository<Ingredient> _IngredientRepository,IHostingEnvironment _env, IRepository<Category> _CategoryRepository
+            ,IRepository<RecipeCategory> _RecipeCategoryRepository)
         {
             env = _env;
             RecipeRepository = _RecipeRepository;
             IngredientRepository = _IngredientRepository;
+            CategoryRepository = _CategoryRepository;
+            RecipeCategoryRepository = _RecipeCategoryRepository;
+        }
+
+        public async Task<bool> AddCategoriesAsync(Guid id, IEnumerable<string> categories)
+        {
+            var cats=await CategoryRepository.GetAllAsync();
+
+            var categoryRecipes = await RecipeCategoryRepository.GetAllAsync();
+            foreach(var category in categories)
+            {
+                var categoryForRecipe = cats.FirstOrDefault(c => c.Name == category);
+                if (categoryForRecipe != null)
+                {
+                    RecipeCategory rc = new RecipeCategory()
+                    {
+                        CategoryId = categoryForRecipe.Id,
+                        RecipeId = id,
+                    };
+                    if(categoryRecipes.FirstOrDefault(x => x.RecipeId == id && x.CategoryId == categoryForRecipe.Id) == null)
+                    {
+                        await RecipeCategoryRepository.AddAsync(rc);
+                    }
+                    
+                }
+            }
+            return true;
         }
 
         public async Task<bool> AddIngredientsAsync(Guid id, IEnumerable<IngridientViewModel> ingredients)
@@ -93,7 +124,7 @@ namespace RecipeHub.Services.Data
             return true;
         }
 
-        public async Task<IEnumerable<AllRecipesViewModel>> GetAllRecipesAsync(string? searchText)
+        public async Task<IEnumerable<AllRecipesViewModel>> GetAllRecipesAsync(string? searchText, IEnumerable<string> categories)
         {
             var query = RecipeRepository.GetAllAttached()
                .Where(r => r.isDeleted == false)
@@ -102,15 +133,53 @@ namespace RecipeHub.Services.Data
                    Name = r.Name,
                    ImageUrl = r.ImageUrl,
                    Id = r.Id,
+                   Categories=r.RecipeCategories.Select(x=>x.Category.Name).ToList()
                });
 
              if(!String.IsNullOrEmpty(searchText))
             {
                 query = query.Where(r => r.Name.ToLower().Contains(searchText.ToLower()));
             }
+             if(categories.Count()!=0)
+            {
+                foreach(var cat in categories)
+                {
+                    query = query.Where(x => x.Categories.Contains(cat));
+                }
+            }
 
             var list = await query.ToListAsync();
                
+
+            return list;
+        }
+
+        public async Task<IDictionary<string, bool>> GetCategoryForRecipeAsync(Guid id)
+        {
+            var list = await CategoryRepository.GetAllAttached().ToListAsync();
+
+            var recipe = await RecipeRepository.GetAllAttached().Include(x=>x.RecipeCategories).FirstOrDefaultAsync(x=>x.Id == id);
+
+            Dictionary<string, bool> res = new Dictionary<string, bool>();
+
+            foreach(var category in list)
+            {
+
+                if(recipe.RecipeCategories.FirstOrDefault(x=>x.RecipeId==id && x.CategoryId==category.Id) != null)
+                {
+                    res.Add(category.Name, true);
+                }
+                else
+                {
+                    res.Add(category.Name, false);
+                }
+            }
+            return res;
+        }
+
+        public async Task<IEnumerable<string>> GetCategoryNamesAsync()
+        {
+            var list = await CategoryRepository.GetAllAttached().Select(x => x.Name).ToListAsync();
 
             return list;
         }
